@@ -1,55 +1,34 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
-#include <cctype>
 using namespace std; 
 
-int pow(int n,int s)
-{
-    int res = 1;
-    for(size_t i = 0; i != s; ++i)
-        res*=n;
-    return res;
-}
-
 void ten_base(int in, int base){
-    if (in<base) {
-        if (in%base < 10){
+    if (in>base)
+        ten_base(in/base,base);
+
+    if (in % base < 10)
         cout<< char(in%base + '0');
-    }
-    else {
-        cout<< char(in%base + 'A'-10);
-    }
-        return;
-    }
-    ten_base(in/base,base);
-    if (in%base < 10){
-        cout<< char(in%base + '0');
-    }
-    else {
-        cout<< char(in%base + 'A'-10);
-    }
+    else 
+        cout<< char(in % base + 'A'-10);
 }
  
  
 int main(){
-    int basein, baseout, sum=0, a, rank = 0;
+    int basein, baseout, sum=0, a, rank = 1;
     string str;
 	cout << "Enter num & base for in ";
 	cin >> str >> basein;
-    transform(str.begin(), str.end(), str.begin(), ::toupper);
     cout << "Enter base for out ";
     cin >> baseout;
-    rank=str.size()-1;
-	for (int i = 0; i < str.size(); i++) {
+	for (int i = str.size() - 1; i >=0; i--) {
         if (isdigit(str[i])) {
             a = str[i] - '0';
         }
-        if (isalpha(str[i])) {
+        else {
             a = str[i] - 'A' + 10;
         }
-        sum +=a*pow(basein,rank);
-        rank--;
+        sum += a*rank;
+        rank *= basein;
     }
     cout<<sum<<endl;
     ten_base(sum,baseout);
